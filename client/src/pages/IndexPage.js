@@ -12,6 +12,7 @@ export default function IndexPage() {
   }, []);
   return (
     <>
+    {posts.length === 0 && (<div style={{textAlign:"center"}}>No posts to show</div>)}
       {posts.length > 0 && posts.map((post )=> (
         <Post {...post}  />
       ))}

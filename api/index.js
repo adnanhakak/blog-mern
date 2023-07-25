@@ -141,10 +141,16 @@ app.get('/post/:id', async (req, res) => {
 })
 
 app.delete("/post/:id", async (req, res) => {
-  console.log(req.params.id)
-  let deleted = await Post.findByIdAndDelete(req.params.id)
-  res.json(deleted)
+  jwt.verify(req.cookies.token, secret, {}, async (err, info) => {
+    if (err) throw err;
+    let postInfo = await Post.findById(req.params.id).populate("author")
+    if (postInfo?.author?.username === info.username) {
+      let deleted = await Post.findByIdAndDelete(req.params.id)
+      res.json(deleted)
+    }
+  })
 })
+
 
 app.listen(4000);
 //

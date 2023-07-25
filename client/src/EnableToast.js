@@ -8,7 +8,7 @@ export const EnableToast = () => {
         newestOnTop={false}
         closeOnClick
         rtl={false}
-        theme="light"
+        theme="dark"
     />
 }
 
