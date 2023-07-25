@@ -1,13 +1,17 @@
 import {Link} from "react-router-dom";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect} from "react";
 import {UserContext} from "./UserContext";
+import {  toast } from 'react-toastify';
+
 
 export default function Header() {
   const {setUserInfo,userInfo} = useContext(UserContext);
   useEffect(() => {
-    fetch('http://localhost:4000/profile', {
+    fetch('http://localhost:4000/profile',
+     {
       credentials: 'include',
-    }).then(response => {
+    }
+    ).then(response => {
       response.json().then(userInfo => {
         setUserInfo(userInfo);
       });
@@ -20,6 +24,9 @@ export default function Header() {
       method: 'POST',
     });
     setUserInfo(null);
+    toast.success(`Successfully logged out`, {
+      position: toast.POSITION.CENTER,
+    });
   }
 
   const username = userInfo?.username;
@@ -31,7 +38,7 @@ export default function Header() {
         {username && (
           <>
             <Link to="/create">Create new post</Link>
-            <a onClick={logout}>Logout ({username})</a>
+            <a  onClick={logout}>Logout ({username})</a>
           </>
         )}
         {!username && (

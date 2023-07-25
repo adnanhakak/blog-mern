@@ -1,5 +1,6 @@
 import {useContext, useState} from "react";
 import {Navigate} from "react-router-dom";
+import {  toast } from 'react-toastify';
 import {UserContext} from "../UserContext";
 
 export default function LoginPage() {
@@ -18,6 +19,9 @@ export default function LoginPage() {
     if (response.ok) {
       response.json().then(userInfo => {
         setUserInfo(userInfo);
+        toast.success(`Login success, Welcome back ${userInfo.username}`, {
+          position: toast.POSITION.CENTER,
+        });
         setRedirect(true);
       });
     } else {

@@ -113,7 +113,7 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
     if (!isAuthor) {
       return res.status(400).json('you are not the author');
     }
-    await postDoc.update({
+    await postDoc.updateOne({
       title,
       summary,
       content,
@@ -138,6 +138,12 @@ app.get('/post/:id', async (req, res) => {
   const { id } = req.params;
   const postDoc = await Post.findById(id).populate('author', ['username']);
   res.json(postDoc);
+})
+
+app.delete("/post/:id", async (req, res) => {
+  console.log(req.params.id)
+  let deleted = await Post.findByIdAndDelete(req.params.id)
+  res.json(deleted)
 })
 
 app.listen(4000);
