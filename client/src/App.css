@@ -153,3 +153,29 @@ div.post-page a.edit-btn{
 a svg{
     height:20px;
 }
+
+.pageinationButtons >Button{
+    width:10%;
+   color:black;
+   font-weight: 600 !important;
+}
+.pageinationButtons >span{
+    /* width:19%; */
+    /* color:rgb(69, 64, 64); */
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.pageinationButtons{
+    display: flex;
+    justify-content: center;
+    gap:8px;
+    align-items: baseline;
+
+}
+
+.css-1c2i806-MuiFormLabel-root-MuiInputLabel-root.Mui-focused{
+    color:black !important
+}
