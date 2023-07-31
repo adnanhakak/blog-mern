@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 
 export default function Pagination(props) {
 
-    const { page, setPage, itemsPerPage, setItemsPerPage, posts ,options} = props;
+    const { page, setPage, itemsPerPage, setItemsPerPage, posts, options } = props;
     const createDropdownItems = (x) => {
         if (typeof x === 'number') {
             let arr = [];
@@ -23,7 +23,7 @@ export default function Pagination(props) {
 
             <Button size="small"
                 variant="text"
-                disabled={page === 0}
+                disabled={page <= 0}
                 onClick={() => setPage(prev => prev - 1)}>
                 {`<Previous`}
             </Button>
@@ -55,7 +55,11 @@ export default function Pagination(props) {
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
                     value={itemsPerPage}
-                    onChange={(e) => setItemsPerPage(e.target.value)}
+                    onChange={(e) => {
+                        setItemsPerPage(e.target.value);
+                        setPage(0);
+                    }
+                    }
                     label="Items Per Page"
                 >
                     {createDropdownItems(options).map((each) => {
@@ -66,7 +70,7 @@ export default function Pagination(props) {
 
             <Button size="small"
                 variant="text"
-                disabled={page === Math.floor(posts.length / itemsPerPage)}
+                disabled={page >= Math.floor(posts.length / itemsPerPage)}
                 onClick={() => setPage(prev => prev + 1)}>
                 {`Next>`}
             </Button>

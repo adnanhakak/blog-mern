@@ -16,19 +16,21 @@ export default function IndexPage() {
   }, []);
   return (
     <>
+
       {!posts.length &&
         (<div style={{ containedAlign: "center" }}>No posts to show</div>)}
       {posts.length &&
         posts.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage).map((post) => (
           <Post {...post} />
         ))}
+
       <Pagination
         page={page}
         setPage={setPage}
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
         posts={posts}
-        options={[5,10,15]}
+        options={[5, 10, 15]}
       />
     </>
   );
