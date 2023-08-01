@@ -27,7 +27,7 @@ export default function RegisterPage() {
     }
   }
   if(redirect){
-    return <Navigate to={"/"}/>
+    return <Navigate to={"/login"}/>
   }
   return (
     <form className="register" onSubmit={register}>

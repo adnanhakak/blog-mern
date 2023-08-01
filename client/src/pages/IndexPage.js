@@ -16,9 +16,8 @@ export default function IndexPage() {
   }, []);
   return (
     <>
-
       {!posts.length &&
-        (<div style={{ containedAlign: "center" }}>No posts to show</div>)}
+        (<div style={{ textAlign: "center" }}>No posts to show</div>)}
       {posts.length &&
         posts.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage).map((post) => (
           <Post {...post} />
@@ -32,6 +31,7 @@ export default function IndexPage() {
         posts={posts}
         options={[5, 10, 15]}
       />
+      
     </>
   );
 }

@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require("mongoose");
 const User = require('./models/User');
 const Post = require('./models/Post');
+const Review = require("./models/Reviews")
 const bcrypt = require('bcryptjs');
 const app = express();
 const jwt = require('jsonwebtoken');
@@ -45,8 +46,8 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const userDoc = await User.findOne({ username });
   console.log(userDoc)
-  if(!userDoc){
-    return  res.status(400).json({creds:"invalid"})
+  if (!userDoc) {
+    return res.status(400).json({ creds: "invalid" })
   }
   const passOk = bcrypt.compareSync(password, userDoc.password);
   if (passOk) {
@@ -132,29 +133,88 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 app.get('/post', async (req, res) => {
   res.json(
     await Post.find()
-      .populate('author', ['username'])
+      .populate('author', ['username']).populate('reviews')
       .sort({ createdAt: -1 })
-      // .limit(20)
+    // .limit(20)
   );
 });
 
 app.get('/post/:id', async (req, res) => {
   const { id } = req.params;
-  const postDoc = await Post.findById(id).populate('author', ['username']);
-  res.json(postDoc);
-})
+  try {
+    const postDoc = await Post.findById(id)
+      .populate('author', ['username'])
+      .populate({
+        path: 'reviews',
+        populate: {
+          path: 'author',
+          select: 'username',
+        },
+      });
+
+    res.json(postDoc);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch the post' });
+  }
+});
+
 
 app.delete("/post/:id", async (req, res) => {
   jwt.verify(req.cookies.token, secret, {}, async (err, info) => {
     if (err) throw err;
     let postInfo = await Post.findById(req.params.id).populate("author")
     if (postInfo?.author?.username === info.username) {
+      await Review.deleteMany({ postId: req.params.id });
       let deleted = await Post.findByIdAndDelete(req.params.id)
       res.json(deleted)
     }
   })
 })
 
+////////////////////////reviews //////////////////////////
+app.post("/review/:id", async (req, res) => {
+  jwt.verify(req.cookies.token, secret, {}, async (err, info) => {
+    const { review, rating ,id} = req.body;
+    const reviewRes = await Review.create({ review, rating, author: info.id,postId:id });
+    let currentPost = await Post.findById(req.params.id)
+    currentPost.reviews.push(reviewRes)
+    await currentPost.save()
+    res.json(reviewRes)
+  })
+})
 
-app.listen(4000);
-//
+app.delete("/review/:id", async (req, res) => {
+  jwt.verify(req.cookies.token, secret, {}, async (err, info) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    console.log(req.body)
+    if (req.body.author._id === info.id) {
+      console.log({ paramsid: req.params.id, bobdyid: req.body.id, requnderscoreid: req.body._id })
+      await Review.findByIdAndDelete(req.params.id)
+      await Post.findByIdAndUpdate(req.body.postId, { $pull: { reviews: req.body._id } });
+      res.json({ success: "true" })
+    } else {
+      res.json("invalid request")
+    }
+  })
+})
+
+app.put("/review/:id", async (req, res) => {
+  jwt.verify(req.cookies.token, secret, {}, async (err, info) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    if (req.body.props.author._id === info.id) {
+      await Review.findByIdAndUpdate(req.params.id,
+        { rating: req.body.newRating, review: req.body.newReview },
+        { new: true })
+      res.json({ success: "true" })
+    } else {
+      res.json("invalid request")
+    }
+  })
+})
+
+app.listen(4000)

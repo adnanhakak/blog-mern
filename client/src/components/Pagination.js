@@ -5,7 +5,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function Pagination(props) {
-
     const { page, setPage, itemsPerPage, setItemsPerPage, posts, options } = props;
     const createDropdownItems = (x) => {
         if (typeof x === 'number') {
