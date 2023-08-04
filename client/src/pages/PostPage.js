@@ -141,6 +141,8 @@ export default function PostPage() {
       <div className="image">
         <img src={`http://localhost:4000/${state.data.cover}`} alt="" />
       </div>
+      <div className="content" dangerouslySetInnerHTML={{ __html: state.data.summary }} />
+
       <div className="content" dangerouslySetInnerHTML={{ __html: state.data.content }} />
 
       <h2 style={{ textDecoration: "underline" }}>Reviews</h2>
