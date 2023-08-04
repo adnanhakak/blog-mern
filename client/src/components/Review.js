@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MuiAlert from '@mui/material/Alert';
@@ -15,20 +14,7 @@ import { useContext, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { TextareaAutosize } from '@mui/material';
 import { UserContext } from '../UserContext';
-
-function formatDateAndTime(isoTimestamp) {
-    const dateObj = new Date(isoTimestamp);
-    const day = String(dateObj.getDate()).padStart(2, "0");
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const year = dateObj.getFullYear();
-    const hours = dateObj.getHours();
-    const minutes = String(dateObj.getMinutes()).padStart(2, "0");
-    const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = String(hours % 12 || 12).padStart(2, "0");
-    const formattedTime = `${formattedHours}:${minutes} ${ampm}`;
-    const formattedDate = `${day}/${month}/${year}`;
-    return `${formattedDate} , ${formattedTime}`;
-  }
+import { formatDateAndTime } from '../Utils';
 
 export default function Review(props) {
     const { userInfo } = useContext(UserContext);
@@ -57,7 +43,7 @@ export default function Review(props) {
                 fetch(`http://localhost:4000/post/${props.postId}`)
                     .then(response => {
                         response.json().then(postInfo => {
-                            props.setPostInfo(postInfo);
+                            props.dispatch({type:"setInfo",payload:postInfo});
                         });
                         setEditing(false)
                         setEditOpen(true)

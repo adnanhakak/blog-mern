@@ -3,20 +3,11 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { createDropdownItems } from '../Utils';
 
 export default function Pagination(props) {
     const { page, setPage, itemsPerPage, setItemsPerPage, posts, options } = props;
-    const createDropdownItems = (x) => {
-        if (typeof x === 'number') {
-            let arr = [];
-            for (let i = 1; i <= x; i++) {
-                arr.push(i);
-            }
-            return arr;
-        } else if (Array.isArray(x)) {
-            return x;
-        }
-    };
+  
     return (
         <div className="pageinationButtons">
 

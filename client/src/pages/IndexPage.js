@@ -19,8 +19,8 @@ export default function IndexPage() {
       {!posts.length &&
         (<div style={{ textAlign: "center" }}>No posts to show</div>)}
       {posts.length &&
-        posts.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage).map((post) => (
-          <Post {...post} />
+        posts.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage).map((post,i) => (
+          <Post {...post} key={i*Math.random()}/>
         ))}
 
       <Pagination
