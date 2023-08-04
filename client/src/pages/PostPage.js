@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useReducer } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../UserContext";
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from 'react-router-dom';
 import MuiAlert from '@mui/material/Alert';
 import React from "react"
@@ -13,8 +14,33 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Review from "../components/Review";
 
+const initialState = {
+  loading: true,
+  err: "",
+  data: null
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "success":
+      return {
+        loading: false,
+        err: null,
+        data: action.payload
+      };
+    case "failure":
+      console.log(action.payload)
+      return {
+        loading: true,
+        err: action.payload,
+        data: null
+      };
+    default:
+      return state;
+  }
+}
 export default function PostPage() {
-  const [postInfo, setPostInfo] = useState(null);
+  const [state, dispatch] = useReducer(reducer, initialState)
   const { userInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false)
   const { id } = useParams();
@@ -40,12 +66,12 @@ export default function PostPage() {
       await fetch(`http://localhost:4000/post/${id}`)
         .then(response => {
           response.json().then(postInfo => {
-            setPostInfo(postInfo);
+            dispatch({ type: "success", payload: postInfo })
             setReview('');
             setRating(5);
             setEditOpen(true)
           });
-        });
+        }).catch((err) => dispatch({ type: "failure", payload: err }))
     }
   };
 
@@ -68,12 +94,12 @@ export default function PostPage() {
     fetch(`http://localhost:4000/post/${id}`)
       .then(response => {
         response.json().then(postInfo => {
-          setPostInfo(postInfo);
+          dispatch({ type: "success", payload: postInfo })
         });
-      });
+      }).catch((err) => dispatch({ type: "failure", payload: err }))
   }, []);
 
-  if (!postInfo) return '';
+  if (!state.data) return <div style={{ textAlign: "center",marginTop:"200px" }}><CircularProgress /></div>
   if (redirect) {
     return <Navigate to={"/"} />
   }
@@ -88,17 +114,17 @@ export default function PostPage() {
           Review Created Successfully
         </Alert>
       </Snackbar>
-      <h1>{postInfo.title}</h1>
+      <h1>{state.data.title}</h1>
       <Rating
-      className="ratingPost"
+        className="ratingPost"
         readOnly
-        value={postInfo.reviews.reduce((acc, curr) => acc + curr.rating, 0) / postInfo.reviews.length}
+        value={state.data.reviews.reduce((acc, curr) => acc + curr.rating, 0) / state.data.reviews.length}
       />
-      <time>{formatISO9075(new Date(postInfo.createdAt))}</time>
-      <div className="author">by @{postInfo.author.username}</div>
-      {userInfo?.id === postInfo?.author?._id && (
+      <time>{formatISO9075(new Date(state.data.createdAt))}</time>
+      <div className="author">by @{state.data.author.username}</div>
+      {userInfo?.id === state.data?.author?._id && (
         <div className="edit-row">
-          <Link className="edit-btn" to={`/edit/${postInfo._id}`}>
+          <Link className="edit-btn" to={`/edit/${state.data._id}`}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
             </svg>
@@ -113,9 +139,9 @@ export default function PostPage() {
         </div>
       )}
       <div className="image">
-        <img src={`http://localhost:4000/${postInfo.cover}`} alt="" />
+        <img src={`http://localhost:4000/${state.data.cover}`} alt="" />
       </div>
-      <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.content }} />
+      <div className="content" dangerouslySetInnerHTML={{ __html: state.data.content }} />
 
       <h2 style={{ textDecoration: "underline" }}>Reviews</h2>
 
@@ -139,10 +165,10 @@ export default function PostPage() {
         <button onClick={handleSubmit} style={{ marginTop: '5px', marginBottom: "40px" }}>Post review</button>
       </form>)}
 
-      {postInfo.reviews.map((post) => {
+      {state.data.reviews.map((post) => {
         return (
           <div className="reviews">
-            <Review {...post} setPostInfo={setPostInfo} postId={id} />
+            <Review {...post} dispatch={dispatch} postId={id} />
           </div>)
       })}
     </div>

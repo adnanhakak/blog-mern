@@ -43,7 +43,7 @@ export default function Review(props) {
                 fetch(`http://localhost:4000/post/${props.postId}`)
                     .then(response => {
                         response.json().then(postInfo => {
-                            props.dispatch({type:"setInfo",payload:postInfo});
+                            props.dispatch({ type: "success", payload: postInfo })
                         });
                         setEditing(false)
                         setEditOpen(true)
@@ -70,12 +70,11 @@ export default function Review(props) {
             await fetch(`http://localhost:4000/post/${props.postId}`)
                 .then(response => {
                     response.json().then(postInfo => {
-                        props.setPostInfo(postInfo);
+                        props.dispatch({ type: "success", payload: postInfo });
                     });
                     setDeleteOpen(true)
                 });
         }
-
     }
     return (
         <Card sx={{ maxWidth: 300 }}>
@@ -92,30 +91,30 @@ export default function Review(props) {
             {/* ///////////////////delete alert ///////*/}
             <Snackbar
                 open={deleteOpen}
-                anchorOrigin={{ vertical:"bottom", horizontal :"center"}}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 autoHideDuration={2500}
                 onClose={() => setDeleteOpen(false)}
                 message="Review Deleted Successfully"
             />
             <div className='header-container'>
-            <CardHeader
-                avatar={<>
-                    <Avatar sx={{ bgcolor: red[400] }} aria-label="recipe">
-                        {props.author.username.charAt(0)}
-                    </Avatar>
-                </>
-                }
-                title={props.author.username}
-                subheader={formatDateAndTime(props.updatedAt)}
-            />
-            {(userInfo?.id === props?.author?._id) && (
-                <div className='btn-container'>
-                    <button className='ed-icon' onClick={() => handleDelete(props)}><DeleteIcon /></button>
-                    {!editing && <button className='ed-icon' onClick={() => setEditing(true)}><EditIcon /></button>}
-                    {editing && <button className='ed-icon' onClick={() => setEditing(false)}><CloseIcon /></button>}
+                <CardHeader
+                    avatar={<>
+                        <Avatar sx={{ bgcolor: red[400] }} aria-label="recipe">
+                            {props.author.username.charAt(0)}
+                        </Avatar>
+                    </>
+                    }
+                    title={props.author.username}
+                    subheader={formatDateAndTime(props.updatedAt)}
+                />
+                {(userInfo?.id === props?.author?._id) && (
+                    <div className='btn-container'>
+                        <button className='ed-icon' onClick={() => handleDelete(props)}><DeleteIcon /></button>
+                        {!editing && <button className='ed-icon' onClick={() => setEditing(true)}><EditIcon /></button>}
+                        {editing && <button className='ed-icon' onClick={() => setEditing(false)}><CloseIcon /></button>}
 
-                </div>
-            )}
+                    </div>
+                )}
             </div>
             {!editing && <CardContent>
                 <Rating

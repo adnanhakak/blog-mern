@@ -34,7 +34,7 @@ export default function Pagination(props) {
                     label="Page no."
                 >
                     {createDropdownItems(Math.floor((posts.length - 1) / itemsPerPage + 1)).map((each) => {
-                        return <MenuItem key={each} value={each - 1}>{each}</MenuItem>
+                        return <MenuItem key={each*Math.random()} value={each - 1}>{each}</MenuItem>
                     })}
                 </Select>
             </FormControl>
@@ -53,7 +53,7 @@ export default function Pagination(props) {
                     label="Items Per Page"
                 >
                     {createDropdownItems(options).map((each) => {
-                        return <MenuItem key={each} value={each}>{each}</MenuItem>
+                        return <MenuItem key={each*Math.random()} value={each}>{each}</MenuItem>
                     })}
                 </Select>
             </FormControl>
