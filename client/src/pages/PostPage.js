@@ -170,7 +170,7 @@ export default function PostPage() {
       {state.data.reviews.map((post) => {
         return (
           <div className="reviews">
-            <Review {...post} dispatch={dispatch} postId={id} />
+            <Review key={post._id} {...post} dispatch={dispatch} postId={id} />
           </div>)
       })}
     </div>

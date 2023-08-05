@@ -252,54 +252,96 @@ a svg {
     align-items: baseline;
 }
 
-.textAreaMain{
-width: 100%;
-height:80px !important;
-font-family: IBM Plex Sans, sans-serif;
-font-size: 0.875rem;
-font-weight: 400;
-line-height: 1.5;
-padding: 12px;
-border-radius: 12px 12px 0 12px;
-color: #24292f;
-background: #fff;
-border: 1px solid #d0d7de;
-box-shadow: 0px 2px 2px #f6f8fa;
+.textAreaMain {
+    width: 100%;
+    height: 80px !important;
+    font-family: IBM Plex Sans, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 12px;
+    border-radius: 12px 12px 0 12px;
+    color: #24292f;
+    background: #fff;
+    border: 1px solid #d0d7de;
+    box-shadow: 0px 2px 2px #f6f8fa;
 
-&:hover {
-  border-color: #3399FF;
+    &:hover {
+        border-color: #3399FF;
+    }
+
+    &:focus {
+        border-color: #3399FF !important;
+        box-shadow: 0 0 0 0.3px #b6daff;
+    }
 }
 
-&:focus {
-  border-color: #3399FF !important;
-  box-shadow: 0 0 0 0.3px #b6daff;
-}}
-
-.css-ryrseu-MuiRating-root{
+.css-ryrseu-MuiRating-root {
     color: #746a54 !important;
     cursor: pointer;
     margin-bottom: 16px !important;
 }
-.texts .css-ryrseu-MuiRating-root{
+
+.texts .css-ryrseu-MuiRating-root {
     color: #746a54 !important;
     cursor: pointer;
     margin-bottom: 0px !important;
 }
 
-.css-iljtu2-MuiRating-root{
+.css-iljtu2-MuiRating-root {
     color: #fa3700;
 }
 
-#thoughts::first-letter{
-    color:rgb(187, 13, 13);
+#thoughts::first-letter {
+    color: rgb(187, 13, 13);
     font-size: 2.3rem;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 700;
 }
 
-.ratingPost{
- left :50%;
- transform: translate(-50%, 0);
- margin-bottom: 0px !important;
+.ratingPost {
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-bottom: 0px !important;
 }
 
+@media (max-width: 500px) {
+    .pageinationButtons {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .prev-button {
+        margin-left: 16px !important;
+        margin-top: 4px !important;
+    }
+
+    .pageinationButtons>span {
+        margin-left: 1.5%;
+    }
+
+    .create {
+        margin-left: 40px;
+    }
+
+    .edit-row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+        margin-left: 0px;
+    }
+
+    div.post-page a.edit-btn {
+        margin-left: 0px !important;
+        justify-content: center;
+    }
+
+    .ed-icon {
+        width: 40%;
+    }
+    .css-83ijpv-MuiTypography-root{
+        min-width: max-content !important;
+    }
+}

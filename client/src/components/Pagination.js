@@ -12,6 +12,7 @@ export default function Pagination(props) {
         <div className="pageinationButtons">
 
             <Button size="small"
+            className='prev-button'
                 variant="text"
                 disabled={page <= 0}
                 onClick={() => setPage(prev => prev - 1)}>
